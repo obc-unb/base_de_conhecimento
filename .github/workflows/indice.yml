@@ -1,0 +1,18 @@
+name: Atualizar índice
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["index.html"]
+permissions:
+  contents: write
+jobs:
+  indice:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 gerar_indice.py
+      - run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet || (git commit -m "Atualiza índice" && git push)
